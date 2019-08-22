@@ -1,20 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Todo / Shopping List</title>
-    <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Shopping List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="reset.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <script src="app.js"></script>
 </head>
 
 <body>
-    <h1>Shopping List</h1>
-    <div class="items"></div>
-    <footer>Created by Ross Cooper</footer>
+    <section class="todoapp">
+        <header class="taskbar webflow-style bkg-highlight">
+            <form>
+                <input class="input" type="text" placeholder="New Task" autofocus></input>
+            </form>
+        </header>
+        <ul class="taskList">
+        </ul>
+        <footer class="footer bkg-highlight">
+            <ul class="filters">
+                <li><a href="#/">ALL</a></li>
+                <li><a href="#/">ACTIVE</a></li>
+                <li><a href="#/">DONE</a></li>
+            </ul>
+            <button class="clear-done">Tidy list</button>
+        </footer>
+    </section>
 </body>
 
 </html>
