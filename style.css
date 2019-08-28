@@ -60,7 +60,7 @@ body {
     padding-left: 1em;
 }
 
-.taskList {}
+.task-list {}
 
 .task:first-child {
     border-radius: 4px 4px 0px 0px;

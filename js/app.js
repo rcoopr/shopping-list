@@ -1,11 +1,17 @@
 window.onload = function () {
+
+    let model = new Model();
+    let controller = new Controller(model);
+    let view = new View(controller);
+    console.log("fired");
+
     const tasks = [];
     // const idList = localStorage.getItem(idList) || [0];
     const idList = [0];
 
     const input = document.querySelector('input');
     const form = document.querySelector('form');
-    const taskList = document.querySelector('.taskList');
+    const taskList = document.querySelector('.task-list');
     const footer = document.querySelector('.footer');
 
     // const getClass = selector => document.querySelectorAll(${selector});
@@ -14,7 +20,7 @@ window.onload = function () {
     <li class="task bkg-highlight" data-id=${id}>
         <input class="toggle" type="checkbox">
         <h4>${name}</h4>
-        <a href="#" id="destroy-${id}" class="destroy" data-id=${id}>⨯</a>
+        <a href="#" class="destroy" data-id=${id}>⨯</a>
     </li>
     `
 
