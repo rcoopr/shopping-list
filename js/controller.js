@@ -1,29 +1,42 @@
-function Controller(model) {
-    let self = this;
-    this.model = model;
+class Controller {
+    constructor(options) {
+        this.model = options.model;
+        this.view = options.view;
 
-    this.handleEvent = e => {
-        e.stopPropagation();
-        switch (e.type) {
-            case "click":
-                self.clickHandler(e.target);
-                break;
-            default:
-                console.log(e.target);
-        }
+        this.initList();
+        this.initInput();
     }
 
-    this.getModelTaskName = () => self.model.tasks[0].name;
+    initList() {
+        this.view.renderSavedList(() => {
+            this.view.attachRemoveEvents();
+        });
+    }
 
-    this.clickHandler = (target) => {
-        self.model.tasks = {
-            name: "clicked",
-            id: 0
-        };
-        target.innerText = self.getModelTaskName();
+    initInput() {
+        this.input = sel('.input');
+        this.form = sel('form');
+
+        this.form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            let input = e.target[0];
+
+            if (input.value) {
+                this.view.addItem(input.value);
+            }
+
+            input.value = "";
+        });
+    }
+
+    addItem(title) {
+        this.model.insert({
+            id: Date.now(),
+            title,
+            completed: false
+        }, () => {
+            this.view.clearInput();
+        })
     }
 }
-
-export {
-    Controller
-};
