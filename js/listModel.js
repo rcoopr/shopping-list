@@ -11,12 +11,12 @@ class ListModel {
 
   insert(itemsAsArray) {
     const items = this.getLocalStorage();
-    items.push(...itemsAsArray);
+    if (items) items.push(...itemsAsArray);
     this.setLocalStorage(items);
   }
 
   toggleCompleted(id) {
-    const items = this.getLocalStorage();
+    const items = this.getLocalStorage() || [];
     let i;
 
     for (i = 0; i < items.length; i++) {
@@ -43,7 +43,7 @@ class ListModel {
   }
 
   search(query, callback) {
-    const list = this.getLocalStorage();
+    const list = this.getLocalStorage() || [];
     let i;
 
     callback(
@@ -56,11 +56,11 @@ class ListModel {
     );
   }
 
-  count(callback) {
-    // let total = this.search({}, items => items.length);
-    this.search({}, items => {
-      let total = items.length;
+  count() {
+    let total;
+    this.search({}, data => {
+      total = data.length;
     });
-    // return total;
+    return total;
   }
 }

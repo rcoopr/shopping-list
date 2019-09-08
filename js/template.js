@@ -8,7 +8,7 @@ class Template {
                 <input class="toggle" type="checkbox" ${
                   item.completed ? "checked" : ""
                 }>
-                <h4>${item.title}</h4>
+                <h4>${escapeForHTML(item.title)}</h4>
                 <a href="#" class="destroy new" data-id=${item.id}>⨯</a>
             </li>
             `,

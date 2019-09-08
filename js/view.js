@@ -26,7 +26,8 @@ class View {
   }
 
   renderSavedList(callback) {
-    const items = this.model.getLocalStorage();
+    const items = this.model.getLocalStorage() || [];
+
     const listHTML = this.template.createListHTML(items);
     this.listContainer.innerHTML = listHTML;
     this.setFooterVisibility();
@@ -45,7 +46,7 @@ class View {
   }
 
   setCount(value) {
-    this.counter.innerHTML = value;
+    this.counter.innerHTML = `${value} total`;
   }
 
   setFooterVisibility() {

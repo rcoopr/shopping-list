@@ -18,3 +18,6 @@ function asArray(stringOrArray) {
   }
   return vals;
 }
+
+const escapeForHTML = s =>
+  s.replace(/[&<]/g, c => (c === "&" ? "&amp;" : "&lt;"));

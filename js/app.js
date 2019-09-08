@@ -9,6 +9,4 @@ $on(window, "load", function() {
     model: model,
     view: view
   });
-
-  console.log(controller.model.count());
 });
