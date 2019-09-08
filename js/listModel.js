@@ -1,42 +1,59 @@
 class ListModel {
-    constructor(store) {
-        this.name = store;
-        window.localStorage.setItem(this.name, JSON.stringify([{
-            title: "Peppers",
-            id: Date.now(),
-            completed: "false"
-        }]));
-        this.items = JSON.parse(window.localStorage.getItem(this.name));
+  constructor(store) {
+    this.name = store;
+    this.getLocalStorage = () => {
+      return JSON.parse(window.localStorage.getItem(this.name));
+    };
+    this.setLocalStorage = list => {
+      localStorage.setItem(this.name, JSON.stringify(list));
+    };
+  }
 
+  insert(itemsAsArray) {
+    const items = this.getLocalStorage();
+    items.push(...itemsAsArray);
+    this.setLocalStorage(items);
+  }
+
+  toggleCompleted(id) {
+    const items = this.getLocalStorage();
+    let i;
+
+    for (i = 0; i < items.length; i++) {
+      if (items[i].id == id) {
+        items[i].completed = !items[i].completed;
+        console.log(items[0].completed);
+      }
     }
 
-    getItems() {
-        return this.items;
-    }
+    this.setLocalStorage(items);
+  }
 
-    addItemToModel(itemsToAdd) {
-        this.items.push(...itemsToAdd);
-    }
+  remove(idAsArray) {
+    const items = this.getLocalStorage();
+    let i;
 
-    remove(query, callback) {
-        const items = this.items;
-        const filteredList = items.filter(item => item.id != query);
+    const filteredList = items.filter(item => {
+      for (i in idAsArray) {
+        if (item.id == idAsArray[i]) return false;
+      }
+      return true;
+    });
 
+    this.setLocalStorage(filteredList);
+  }
 
-        this.items = filteredList;
+  search(query, callback) {
+    const list = this.getLocalStorage();
+    let i;
 
-        if (callback) callback();
-    }
-
-    // search(query, callback) {
-    //     const list = this.items;
-    //     let i, k;
-
-    //     callback(list.filter(item => {
-    //         for (i in query) {
-    //             if (query[k] !== item[k]) return false;
-    //         }
-    //         return true;
-    //     }));
-    // }
+    callback(
+      list.filter(item => {
+        for (i in query) {
+          if (item[i] !== query[i]) return false;
+        }
+        return true;
+      })
+    );
+  }
 }
