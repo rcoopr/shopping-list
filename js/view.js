@@ -52,7 +52,7 @@ class View {
   setFooterVisibility() {
     const task = sel(".task.no-hidden");
     if (task) {
-      this.footer.style.display = "block";
+      this.footer.style.display = "flex";
     } else {
       this.footer.style.display = "none";
     }
