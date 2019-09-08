@@ -1,73 +1,67 @@
 class View {
-    constructor(options) {
-        this.model = options.model;
-        this.template = options.template;
+  constructor(options) {
+    this.model = options.model;
+    this.template = options.template;
 
-        this.listContainer = sel('.item-list');
-        this.footer = sel('.footer');
+    this.listContainer = sel(".item-list");
+    this.footer = sel(".footer");
+  }
+
+  addItem(values) {
+    let vals;
+    if (values.constructor === String) {
+      vals = [values];
+    } else {
+      vals = [...values];
     }
 
-    addItem(val) {
-        const newItem = [{
-            title: val,
-            id: Date.now(),
-            completed: false
-        }];
+    let newItems = vals.map(val => {
+      const entry = {
+        title: val,
+        id: Date.now(),
+        completed: false
+      };
+      return entry;
+    });
 
-        this.model.addItemToModel(newItem);
-        this.appendList(newItem);
-        this.attachRemoveEvents();
-        this.setFooterVisibility();
+    this.appendList(newItems);
+    // this.attachRemoveEvents();
+    this.setFooterVisibility();
+  }
+
+  deleteItem(id) {
+    this.model.remove(id);
+  }
+
+  removeParent(HTMLElement) {
+    this.deleteItem(HTMLElement.dataset.id);
+
+    const li = HTMLElement.closest(".task");
+    if (li) {
+      li.parentNode.removeChild(li);
     }
+  }
 
-    deleteItem(id) {
-        this.model.remove(id);
+  appendList(items) {
+    const newItemsHTML = this.template.createListHTML(items);
+    this.listContainer.insertAdjacentHTML("beforeend", newItemsHTML);
+  }
+
+  renderSavedList(callback) {
+    const items = this.model.getItems();
+    const listHTML = this.template.createListHTML(items);
+    this.listContainer.innerHTML = listHTML;
+    this.setFooterVisibility();
+
+    if (callback) callback();
+  }
+
+  setFooterVisibility() {
+    const task = sel(".task.no-hidden");
+    if (task) {
+      this.footer.style.display = "block";
+    } else {
+      this.footer.style.display = "none";
     }
-
-    removeParent(HTMLElement) {
-        return () => {
-            this.deleteItem(HTMLElement.dataset.id);
-            if (HTMLElement.parentNode.parentNode) {
-                HTMLElement.parentNode.parentNode.removeChild(HTMLElement.parentNode)
-            }
-            this.setFooterVisibility();
-        }
-    }
-
-    appendList(items) {
-        const newItemsHTML = this.template.createListHTML(items);
-        this.listContainer.insertAdjacentHTML('beforeend', newItemsHTML);
-    }
-
-    renderSavedList(callback) {
-        const items = this.model.getItems();
-        const listHTML = this.template.createListHTML(items);
-        this.listContainer.innerHTML = listHTML;
-        this.setFooterVisibility();
-
-        if (callback) callback();
-    }
-
-    attachRemoveEvents() {
-        const buttons = document.querySelectorAll('.destroy');
-        if (buttons) {
-            const newButtons = [...buttons].filter((button) => button.classList.contains('new'));
-
-            if (newButtons) {
-                newButtons.forEach((button) => {
-                    button.classList.remove('new');
-                    button.addEventListener('click', this.removeParent(button));
-                });
-            }
-        }
-    }
-
-    setFooterVisibility() {
-        const task = sel('.task.no-hidden');
-        if (task) {
-            this.footer.style.display = 'block';
-        } else {
-            this.footer.style.display = 'none';
-        }
-    }
+  }
 }

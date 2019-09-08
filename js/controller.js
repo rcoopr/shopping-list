@@ -1,42 +1,54 @@
 class Controller {
-    constructor(options) {
-        this.model = options.model;
-        this.view = options.view;
+  constructor(options) {
+    this.model = options.model;
+    this.view = options.view;
 
-        this.initList();
-        this.initInput();
-    }
+    this.initList();
+    this.initInput();
+    this.initRemoveButtons();
+  }
 
-    initList() {
-        this.view.renderSavedList(() => {
-            this.view.attachRemoveEvents();
-        });
-    }
+  initList() {
+    this.view.renderSavedList();
+  }
 
-    initInput() {
-        this.input = sel('.input');
-        this.form = sel('form');
+  initInput() {
+    this.input = sel(".input");
+    this.form = sel("form");
 
-        this.form.addEventListener('submit', e => {
-            e.preventDefault();
+    this.form.addEventListener("submit", e => {
+      e.preventDefault();
 
-            let input = e.target[0];
+      let input = e.target[0];
 
-            if (input.value) {
-                this.view.addItem(input.value);
-            }
+      if (input.value) {
+        this.view.addItem(input.value);
+      }
 
-            input.value = "";
-        });
-    }
+      input.value = "";
+    });
+  }
 
-    addItem(title) {
-        this.model.insert({
-            id: Date.now(),
-            title,
-            completed: false
-        }, () => {
-            this.view.clearInput();
-        })
-    }
+  initRemoveButtons() {
+    document.addEventListener("click", e => {
+      if (e.target.closest(".destroy")) {
+        this.deleteItem(e.target);
+      }
+    });
+  }
+
+  addItem(title) {
+    this.model.insert({
+      id: Date.now(),
+      title,
+      completed: false
+    });
+    this.view.setFooterVisibility();
+  }
+
+  deleteItem(HTMLElement) {
+    this.model.remove(HTMLElement.dataset.id);
+    this.view.removeParent(HTMLElement);
+    this.view.setFooterVisibility();
+  }
 }
