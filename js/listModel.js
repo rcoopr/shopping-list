@@ -11,18 +11,17 @@ class ListModel {
 
   insert(itemsAsArray) {
     const items = this.getLocalStorage();
-    items.push(...itemsAsArray);
+    if (items) items.push(...itemsAsArray);
     this.setLocalStorage(items);
   }
 
   toggleCompleted(id) {
-    const items = this.getLocalStorage();
+    const items = this.getLocalStorage() || [];
     let i;
 
     for (i = 0; i < items.length; i++) {
       if (items[i].id == id) {
         items[i].completed = !items[i].completed;
-        console.log(items[0].completed);
       }
     }
 
@@ -44,7 +43,7 @@ class ListModel {
   }
 
   search(query, callback) {
-    const list = this.getLocalStorage();
+    const list = this.getLocalStorage() || [];
     let i;
 
     callback(
@@ -55,5 +54,13 @@ class ListModel {
         return true;
       })
     );
+  }
+
+  count() {
+    let total;
+    this.search({}, data => {
+      total = data.length;
+    });
+    return total;
   }
 }

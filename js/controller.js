@@ -10,6 +10,7 @@ class Controller {
 
   initList() {
     this.view.renderSavedList();
+    this.view.setCount(this.model.count());
   }
 
   initInput() {
@@ -32,7 +33,7 @@ class Controller {
   initClickHandlers() {
     document.addEventListener("click", e => {
       if (e.target.closest(".destroy")) {
-        this.delegateDeleteId(e.target);
+        this.delegateDeleteId(e.target, true);
       }
 
       if (e.target.closest(".filter")) {
@@ -42,6 +43,10 @@ class Controller {
       if (e.target.closest(".toggle")) {
         const li = e.target.closest(".task");
         this.toggleCompletedItem(li.dataset.id);
+      }
+
+      if (e.target.closest(".clear-done")) {
+        this.clearCompletedItems();
       }
     });
   }
@@ -59,13 +64,17 @@ class Controller {
 
     this.model.insert(newEntries);
     this.view.addItem(newEntries);
+    this.view.setCount(this.model.count());
     this.view.setFooterVisibility();
   }
 
-  delegateDeleteId(element) {
-    const id = asArray(element.dataset.id);
-    this.model.remove(id);
+  delegateDeleteId(id, byElement = false) {
+    const idAsArray = byElement ? asArray(id.dataset.id) : asArray(id);
+    const element = sel(`[data-id="${id}"]`) || id;
+
+    this.model.remove(idAsArray);
     this.view.removeParent(element);
+    this.view.setCount(this.model.count());
     this.view.setFooterVisibility();
   }
 
@@ -74,7 +83,9 @@ class Controller {
   }
 
   delegateFilter(filterType) {
-    // filterType === "done" => search for completed: true
+    const activeA = sel(".filter-active");
+    const allA = sel(".filter-all");
+    const doneA = sel(".filter-done");
 
     switch (filterType) {
       // Show all items
@@ -84,6 +95,9 @@ class Controller {
             this.delegateShowItems(item.id);
           });
         });
+        allA.classList.add("filter-in-use");
+        activeA.classList.remove("filter-in-use");
+        doneA.classList.remove("filter-in-use");
         break;
 
       // Search for {completed: true} + hide them
@@ -100,6 +114,10 @@ class Controller {
             this.delegateShowItems(item.id);
           });
         });
+
+        allA.classList.remove("filter-in-use");
+        activeA.classList.add("filter-in-use");
+        doneA.classList.remove("filter-in-use");
         break;
 
       // Search for completed items + hide them
@@ -116,9 +134,15 @@ class Controller {
             this.delegateShowItems(item.id);
           });
         });
+        allA.classList.remove("filter-in-use");
+        activeA.classList.remove("filter-in-use");
+        doneA.classList.add("filter-in-use");
         break;
 
       default:
+        allA.classList.remove("filter-in-use");
+        activeA.classList.remove("filter-in-use");
+        doneA.classList.remove("filter-in-use");
         break;
     }
   }
@@ -129,5 +153,14 @@ class Controller {
 
   delegateHideItems(id) {
     this.view.hide(id);
+  }
+
+  clearCompletedItems() {
+    this.model.search({ completed: true }, items => {
+      items.forEach(item => {
+        this.delegateDeleteId(item.id);
+      });
+    });
+    this.view.setCount(this.model.count());
   }
 }
