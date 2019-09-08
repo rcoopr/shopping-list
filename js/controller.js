@@ -5,7 +5,7 @@ class Controller {
 
     this.initList();
     this.initInput();
-    this.initRemoveButtons();
+    this.initClickHandlers();
   }
 
   initList() {
@@ -22,33 +22,55 @@ class Controller {
       let input = e.target[0];
 
       if (input.value) {
-        this.view.addItem(input.value);
+        this.delegateAddItems(input.value);
       }
 
       input.value = "";
     });
   }
 
-  initRemoveButtons() {
+  initClickHandlers() {
     document.addEventListener("click", e => {
       if (e.target.closest(".destroy")) {
-        this.deleteItem(e.target);
+        this.delegateDeleteId(e.target);
+      }
+
+      if (e.target.closest(".filter")) {
+        this.delegateFilter(e.target.dataset.filter);
       }
     });
   }
 
-  addItem(title) {
-    this.model.insert({
-      id: Date.now(),
-      title,
-      completed: false
+  delegateAddItems(titles) {
+    const titlesAsArray = asArray(titles);
+    const newEntries = titlesAsArray.map(title => {
+      const entry = {
+        title,
+        id: Date.now(),
+        completed: false
+      };
+      return entry;
     });
+
+    this.model.insert(newEntries);
+    this.view.addItem(newEntries);
     this.view.setFooterVisibility();
   }
 
-  deleteItem(HTMLElement) {
-    this.model.remove(HTMLElement.dataset.id);
-    this.view.removeParent(HTMLElement);
+  delegateDeleteId(element) {
+    const id = asArray(element.dataset.id);
+    this.model.remove(id);
+    this.view.removeParent(element);
     this.view.setFooterVisibility();
+  }
+
+  delegateFilter(filterType) {
+    // filterType === "all" => remove all hidden
+    // filterType === "active" => search for completed: false
+    // filterType === "done" => search for completed: true
+
+    const matching = this.model.search({ completed: false }, data =>
+      console.log(data)
+    );
   }
 }

@@ -7,35 +7,13 @@ class View {
     this.footer = sel(".footer");
   }
 
-  addItem(values) {
-    let vals;
-    if (values.constructor === String) {
-      vals = [values];
-    } else {
-      vals = [...values];
-    }
-
-    let newItems = vals.map(val => {
-      const entry = {
-        title: val,
-        id: Date.now(),
-        completed: false
-      };
-      return entry;
-    });
-
-    this.appendList(newItems);
+  addItem(entries) {
+    this.appendList(entries);
     // this.attachRemoveEvents();
     this.setFooterVisibility();
   }
 
-  deleteItem(id) {
-    this.model.remove(id);
-  }
-
   removeParent(HTMLElement) {
-    this.deleteItem(HTMLElement.dataset.id);
-
     const li = HTMLElement.closest(".task");
     if (li) {
       li.parentNode.removeChild(li);
@@ -48,7 +26,7 @@ class View {
   }
 
   renderSavedList(callback) {
-    const items = this.model.getItems();
+    const items = this.model.getLocalStorage();
     const listHTML = this.template.createListHTML(items);
     this.listContainer.innerHTML = listHTML;
     this.setFooterVisibility();
