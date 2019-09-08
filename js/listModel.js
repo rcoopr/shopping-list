@@ -15,6 +15,20 @@ class ListModel {
     this.setLocalStorage(items);
   }
 
+  toggleCompleted(id) {
+    const items = this.getLocalStorage();
+    let i;
+
+    for (i = 0; i < items.length; i++) {
+      if (items[i].id == id) {
+        items[i].completed = !items[i].completed;
+        console.log(items[0].completed);
+      }
+    }
+
+    this.setLocalStorage(items);
+  }
+
   remove(idAsArray) {
     const items = this.getLocalStorage();
     let i;

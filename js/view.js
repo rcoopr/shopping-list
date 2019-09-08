@@ -34,6 +34,16 @@ class View {
     if (callback) callback();
   }
 
+  show(id) {
+    const li = document.querySelector(`[data-id="${id}"]`);
+    li.classList.remove("hidden");
+  }
+
+  hide(id) {
+    const li = document.querySelector(`[data-id="${id}"]`);
+    li.classList.add("hidden");
+  }
+
   setFooterVisibility() {
     const task = sel(".task.no-hidden");
     if (task) {

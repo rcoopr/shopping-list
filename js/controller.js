@@ -38,6 +38,11 @@ class Controller {
       if (e.target.closest(".filter")) {
         this.delegateFilter(e.target.dataset.filter);
       }
+
+      if (e.target.closest(".toggle")) {
+        const li = e.target.closest(".task");
+        this.toggleCompletedItem(li.dataset.id);
+      }
     });
   }
 
@@ -64,13 +69,65 @@ class Controller {
     this.view.setFooterVisibility();
   }
 
+  toggleCompletedItem(id) {
+    this.model.toggleCompleted(id);
+  }
+
   delegateFilter(filterType) {
-    // filterType === "all" => remove all hidden
-    // filterType === "active" => search for completed: false
     // filterType === "done" => search for completed: true
 
-    const matching = this.model.search({ completed: false }, data =>
-      console.log(data)
-    );
+    switch (filterType) {
+      // Show all items
+      case "all":
+        this.model.search({}, items => {
+          items.forEach(item => {
+            this.delegateShowItems(item.id);
+          });
+        });
+        break;
+
+      // Search for {completed: true} + hide them
+      // Search for {completed: false} + show them
+      case "active":
+        this.model.search({ completed: true }, items => {
+          items.forEach(item => {
+            this.delegateHideItems(item.id);
+          });
+        });
+
+        this.model.search({ completed: false }, items => {
+          items.forEach(item => {
+            this.delegateShowItems(item.id);
+          });
+        });
+        break;
+
+      // Search for completed items + hide them
+      // Search for incomplete + show them
+      case "done":
+        this.model.search({ completed: false }, items => {
+          items.forEach(item => {
+            this.delegateHideItems(item.id);
+          });
+        });
+
+        this.model.search({ completed: true }, items => {
+          items.forEach(item => {
+            this.delegateShowItems(item.id);
+          });
+        });
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  delegateShowItems(id) {
+    this.view.show(id);
+  }
+
+  delegateHideItems(id) {
+    this.view.hide(id);
   }
 }
