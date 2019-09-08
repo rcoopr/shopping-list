@@ -8,7 +8,10 @@ function sel(selector) {
 
 function asArray(stringOrArray) {
   let vals = stringOrArray;
-  if (stringOrArray.constructor === String) {
+  if (
+    stringOrArray.constructor === String ||
+    stringOrArray.constructor === Number
+  ) {
     vals = [stringOrArray];
   } else {
     vals = [...stringOrArray];

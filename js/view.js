@@ -4,12 +4,12 @@ class View {
     this.template = options.template;
 
     this.listContainer = sel(".item-list");
+    this.counter = sel(".counter");
     this.footer = sel(".footer");
   }
 
   addItem(entries) {
     this.appendList(entries);
-    // this.attachRemoveEvents();
     this.setFooterVisibility();
   }
 
@@ -42,6 +42,10 @@ class View {
   hide(id) {
     const li = document.querySelector(`[data-id="${id}"]`);
     li.classList.add("hidden");
+  }
+
+  setCount(value) {
+    this.counter.innerHTML = value;
   }
 
   setFooterVisibility() {

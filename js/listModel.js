@@ -22,7 +22,6 @@ class ListModel {
     for (i = 0; i < items.length; i++) {
       if (items[i].id == id) {
         items[i].completed = !items[i].completed;
-        console.log(items[0].completed);
       }
     }
 
@@ -55,5 +54,13 @@ class ListModel {
         return true;
       })
     );
+  }
+
+  count(callback) {
+    // let total = this.search({}, items => items.length);
+    this.search({}, items => {
+      let total = items.length;
+    });
+    // return total;
   }
 }
