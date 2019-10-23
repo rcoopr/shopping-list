@@ -34,22 +34,46 @@ body {
 .app {
   display: flex;
   flex-direction: column;
+  padding: var(--inner-margin);
 }
 
 .meal-list {
-  flex: 1 0 0px;
-  margin: var(--inner-margin);
-  /* min-height: 20em; */
+  flex: 1;
+  margin-bottom: 2em;
 }
 
 .shopping-list {
+  position: relative;
   background-color: #fff9ed;
   color: #121103;
-  border-radius: 0.2em;
-  flex: 1 0 0px;
-  margin: var(--inner-margin);
+  border-radius: 4px;
+  flex: 1;
+  margin-bottom: calc(1em + var(--inner-margin));
   padding: 1.5em 5%;
-  /* min-height: 20em; */
+}
+
+.shopping-list::before,
+.shopping-list::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border-radius: 0.5em;
+  box-shadow:
+    /* The top layer shadow */ 0 1px 1px rgba(0, 0, 0, 0.15),
+    /* The second layer */ 0 10px 0 -5px #fff9ed,
+    /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15);
+}
+
+.shopping-list::after {
+  z-index: -2;
+  border-radius: 0.85em;
+  box-shadow:
+    /* The third layer */ 0 20px 0 -10px #fff9ed,
+    /* The third layer shadow */ 0 20px 1px -9px rgba(0, 0, 0, 0.15);
 }
 
 .handwritten {
@@ -81,18 +105,18 @@ body {
   position: relative;
   width: 100%;
   display: flex;
-  overflow: scroll;
 }
 
 .content > img {
   border-radius: 0.2em;
   margin: 0.25em 0.5em;
-  width: 100px;
-  height: 100px;
+  width: 6.25em;
+  height: 6.25em;
   flex-shrink: 0;
 }
 
 .content > h3 {
+  overflow: scroll;
   font-weight: 300;
   vertical-align: middle;
 }
@@ -100,21 +124,23 @@ body {
 .text {
   display: flex;
   flex-direction: column;
+  padding: 0 0.75em;
+  overflow-wrap: break-word;
+  width: calc(100% - 7.25em);
 }
 
 .text > h3 {
-  flex: 6;
-  display: flex;
-  align-items: center;
+  height: 3.4em;
   overflow: hidden;
-  padding: 0.5em;
+  padding: 0.25em 0em;
+  line-height: 1.5em;
 }
 
 .portions {
   flex: 4;
   display: flex;
   align-items: center;
-  padding: 0.5em;
+  padding: 0.5em 0em;
 }
 
 .shopping-list > .handwritten {
@@ -123,17 +149,73 @@ body {
 
 .shopping-list li {
   line-height: 1.6em;
-  border-bottom: 1px dashed #aaa;
   display: flex;
+}
+
+.ingredients li + li {
+  border-top: 1px dashed #aaa;
 }
 
 .ingredients {
   margin-bottom: 2em;
 }
 
+.btn {
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+}
+
+.btn input {
+  opacity: 0;
+  position: absolute;
+  left: -100000px;
+}
+
+.btn label {
+  position: relative;
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.indicator-notick,
+.indicator-tick {
+  position: absolute;
+  width: inherit;
+}
+
+.indicator-notick img {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.indicator-tick img {
+  transition: opacity 0.2s ease-out;
+}
+
+.btn input:checked ~ .indicator-tick img {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.btn input:checked ~ .indicator-notick img {
+  opacity: 0.4;
+  transition: opacity 0.2s ease-out;
+}
+
+.svg-remove-simple:hover {
+  transform: rotate(90deg);
+  opacity: 1;
+  transition: transform 0.15s 0.15s cubic-bezier(0.55, 0.085, 0.68, 0.53),
+    opacity 0.1s 0s;
+}
+
 .icon {
   line-height: 0;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .svg-tick {
@@ -147,9 +229,12 @@ body {
 
 .svg-remove {
   width: 26px;
+  opacity: 0.4;
 }
 
 .svg-remove-simple {
+  transition: opacity 0.1s 0s;
+  opacity: 0.4;
   width: 12px;
   margin: 0 7px;
 }
@@ -163,8 +248,96 @@ body {
   padding: 0 1em;
 }
 
+.meal-selector {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.meal-selector .background {
+  position: relative;
+  display: flex;
+  top: 15%;
+  left: 10%;
+  width: 80%;
+  height: 70%;
+  color: #121103;
+  background: #faf9ef;
+  box-shadow: 0px 10px 15px -10px rgba(0, 0, 0, 0.75);
+}
+
+.recipe-list {
+  overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 100%;
+  margin: 2.5em;
+  padding: 0.5em;
+  flex: 1 0 0;
+  align-self: center;
+  justify-content: center;
+}
+
+.recipe {
+  flex: 0;
+  background: white;
+  margin: 0.5em;
+  box-shadow: 0 0.25em 0.125em 0 rgba(0, 0, 0, 0.05);
+  border-radius: 0.25em;
+}
+
+.inactive {
+  visibility: hidden;
+  transition: visibility 1s, opacity 0.5s ease-out;
+  opacity: 0;
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 0s, opacity 0.5s ease-out;
+}
+
+.centre-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pages {
+  display: flex;
+}
+
+.pages > i,
+.pages > div {
+  flex: 0 0 auto;
+}
+
+.pages-icon {
+  width: 2.63em;
+  height: 2.63em;
+  background: #faf9ef;
+  color: #1d1f2e;
+  border-radius: 0.25em;
+  margin-top: 0.19em;
+  margin-left: 1em;
+}
+
 @media all and (min-width: 40em) {
   .app {
     flex-direction: row;
+    height: calc(100vh - 2 * var(--inner-margin));
+  }
+
+  .meal-list {
+    margin-right: var(--inner-margin);
+  }
+
+  .meal-list,
+  .shopping-list {
+    width: calc(50vw - 3 * var(--inner-margin));
   }
 }

@@ -10,11 +10,22 @@
       href="https://fonts.googleapis.com/css?family=Nunito:300|Satisfy&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/ac4e9cee40.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./js/eventHandlers.js"></script>
   </head>
 
   <body>
     <section class="app">
       <section class="meal-list">
+        <nav class="pages">
+          <i class="fas fa-pen-square fa-3x"></i>
+          <div class="centre-child pages-icon">
+            <i class="fas fa-th-list fa-lg"></i>
+          </div>
+        </nav>
         <h2 class="handwritten">Evening Meals</h2>
         <ul class="list">
           <li class="list-item">
@@ -57,7 +68,7 @@
             <div class="content">
               <img src="img/bigMeal@2x.png" alt="" srcset="" />
               <div class="text">
-                <h3>12378</h3>
+                <h3>Recipe</h3>
                 <div class="portions">
                   <span>Portions: </span>
                   <span class="computed">2</span>
@@ -71,40 +82,76 @@
         <h2 class="handwritten">Shopping List</h2>
         <ul class="ingredients">
           <li class="ingredient-item">
-            <a href="/#" class="svg-tick icon">
-              <img src="svg/tick.svg" width="26" height="26" alt="" />
-            </a>
+            <div class="btn">
+              <label for="checkbox-1" class="ch-label">
+                <input type="checkbox" id="checkbox-1" />
+                <i class="indicator-tick">
+                  <img src="svg/tick.svg" alt="" />
+                </i>
+                <i class="indicator-notick">
+                  <img src="svg/notick.svg" alt="" />
+                </i>
+              </label>
+            </div>
             <h4>
               Ingredients
             </h4>
-            <a href="/#" class="svg-remove-simple icon">
-              <img src="svg/removeSimple.svg" width="12" height="12" alt="" />
-            </a>
+            <label for="delete-3" class="svg-remove-simple icon">
+              <img src="svg/removeSimple.svg" alt="" />
+            </label>
           </li>
           <li class="ingredient-item">
-            <a href="/#" class="svg-tick icon">
-              <img src="svg/tick.svg" width="26" height="26" alt="" />
-            </a>
+            <div class="btn">
+              <label for="checkbox-2" class="ch-label">
+                <input type="checkbox" id="checkbox-2" />
+                <i class="indicator-tick">
+                  <img src="svg/tick.svg" alt="" />
+                </i>
+                <i class="indicator-notick">
+                  <img src="svg/notick.svg" alt="" />
+                </i>
+              </label>
+            </div>
             <h4>
               Ingredients
             </h4>
-            <a href="/#" class="svg-remove icon">
-              <img src="svg/remove.svg" width="26" height="26" alt="" />
-            </a>
+            <label for="delete-3" class="svg-remove-simple icon">
+              <img src="svg/removeSimple.svg" alt="" />
+            </label>
           </li>
           <li class="ingredient-item">
-            <a href="/#" class="svg-notick icon">
-              <img src="svg/notick.svg" width="26" height="26" alt="" />
-            </a>
+            <div class="btn">
+              <label for="checkbox-3" class="ch-label">
+                <input checked="false" type="checkbox" id="checkbox-3" />
+                <i class="indicator-tick">
+                  <img src="svg/tick.svg" alt="" />
+                </i>
+                <i class="indicator-notick">
+                  <img src="svg/notick.svg" alt="" />
+                </i>
+              </label>
+            </div>
             <h4>
               Ingredients
             </h4>
-            <a href="/#" class="svg-remove-simple icon">
-              <img src="svg/removeSimple.svg" width="12" height="12" alt="" />
-            </a>
+            <label for="delete-3" class="svg-remove-simple icon">
+              <img src="svg/removeSimple.svg" alt="" />
+            </label>
           </li>
         </ul>
+
         <h3 class="handwritten">From the cupboard...</h3>
+      </section>
+      <section class="meal-selector inactive">
+        <div class="background">
+          <ul class="recipe-list">
+            <li class="recipe">Item 1</li>
+            <li class="recipe">Item 2</li>
+            <li class="recipe">Item 3</li>
+            <li class="recipe">Item 3</li>
+            <li class="recipe">Item 3</li>
+          </ul>
+        </div>
       </section>
     </section>
   </body>
